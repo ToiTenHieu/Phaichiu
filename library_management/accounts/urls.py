@@ -12,5 +12,11 @@ urlpatterns = [
     path('catalog/', views.catalog, name='catalog'), 
     path('services/', views.services, name='services'),
     path('contact/', views.contact, name='contact'),
+    path('users/<int:user_id>/edit/', views.edit_user, name='edit_user'),
+    path("api/users/<int:user_id>/delete/", views.delete_user_api, name="delete_user_api"),
+    path("api/add-book/", views.add_book, name="add_book"),
+    path("add-book/", views.add_book, name="add_book"),
+    path("api/books/", views.book_list, name="book_list"),
+    path("api/books/<int:book_id>/", views.book_detail, name="book_detail"),
 
 ]

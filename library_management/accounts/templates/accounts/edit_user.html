@@ -1,0 +1,74 @@
+{% extends "basee.html" %}
+{% block content %}
+<!-- edit_user.html -->
+ <!-- Quản Lý Sách Section -->
+ {% include "accounts/managebook.html" %}
+<!-- Quản Lý Mượn/Trả Section -->
+{% include "accounts/manageBorrow.html" %}
+<!-- Giao diện Chỉnh Sửa Người Dùng -->
+<div
+  id="quanLyNguoiDung"
+  class="section bg-white rounded-2xl shadow-lg p-6 mb-6 card-hover transition-all duration-300"
+>
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-blue-500 to-purple-500 p-4 rounded-t-2xl -mx-6 -mt-6 mb-6 flex items-center justify-between">
+    <h2 class="text-white font-bold text-lg flex items-center gap-2">
+      👤 Chỉnh Sửa Người Dùng
+    </h2>
+  </div>
+
+  <!-- Form -->
+  <form method="POST" class="space-y-4">
+    {% csrf_token %}
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Tên đầy đủ</label>
+      <input type="text" name="name" value="{{ user.name }}" 
+             class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-purple-400"/>
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Điện thoại</label>
+      <input type="text" name="phone" value="{{ user.phone }}" 
+             class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-purple-400"/>
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Địa chỉ</label>
+      <input type="text" name="address" value="{{ user.address }}" 
+             class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-purple-400"/>
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Ngày sinh</label>
+      <input type="date" name="date_of_birth" value="{{ user.date_of_birth|date:'Y-m-d' }}" 
+             class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-purple-400"/>
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Giới tính</label>
+      <select name="gender" 
+              class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-purple-400">
+        <option value="male" {% if user.gender == 'male' %}selected{% endif %}>Nam</option>
+        <option value="female" {% if user.gender == 'female' %}selected{% endif %}>Nữ</option>
+      </select>
+    </div>
+
+    <!-- Nút -->
+    <div class="flex justify-end gap-3 pt-4">
+      <button type="submit" 
+              class="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium hover:opacity-90">
+        ✔ Lưu
+      </button>
+      <a href="{% url 'librarian_dashboard' %}?section=quanLyNguoiDung"
+         class="px-5 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 text-white font-medium">
+        ✖ Huỷ
+      </a>
+    </div>
+  </form>
+</div>
+
+
+{% include "accounts/bookstatistics.html" %}
+
+{% endblock %}

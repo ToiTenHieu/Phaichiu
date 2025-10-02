@@ -1,0 +1,454 @@
+<!-- Quản Lý Sách Section -->
+<!-- Quản Lý Mượn/Trả Section -->
+<div
+  id="muonTraSach"
+  class="section bg-white rounded-xl shadow-lg p-6 mb-6 card-hover transition-all duration-300 hidden"
+>
+  <h2 class="text-2xl font-bold text-green-600 mb-6 flex items-center">
+    🔄 Quản Lý Mượn/Trả Sách
+  </h2>
+
+  <!-- Navigation tabs cho mượn/trả -->
+  <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
+    <button
+      onclick="showBorrowTab('dangMuon', this)"
+      class="borrow-tab flex-1 px-4 py-2 text-center font-semibold rounded-md bg-green-500 text-white transition-all duration-200"
+    >
+      📋 Đang Mượn
+    </button>
+    <button
+      onclick="showBorrowTab('lichSu', this)"
+      class="borrow-tab flex-1 px-4 py-2 text-center font-semibold text-gray-600 hover:text-green-600 transition-all duration-200"
+    >
+      📚 Lịch Sử
+    </button>
+    <button
+      onclick="showBorrowTab('thongKe', this)"
+      class="borrow-tab flex-1 px-4 py-2 text-center font-semibold text-gray-600 hover:text-green-600 transition-all duration-200"
+    >
+      👥 Thống Kê
+    </button>
+  </div>
+
+  <!-- Tab Danh sách đang mượn -->
+  <div id="dangMuon" class="borrow-content bg-gray-50 rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">Sách Đang Được Mượn</h3>
+      <div class="text-sm text-gray-600">
+        Tổng: <span class="font-semibold text-green-600">3</span> cuốn
+      </div>
+    </div>
+    <div class="max-h-96 overflow-y-auto space-y-3">
+      <!-- Sách đang mượn 1 -->
+      <div
+        class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500 slide-in"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-800">Lập Trình Web</h4>
+            <p class="text-sm text-gray-600">👤 ND001 - Trần Thị C</p>
+            <p class="text-sm text-gray-600">📅 Ngày mượn: 15/12/2024</p>
+            <p class="text-sm text-gray-600">
+              ⏰ Hạn trả: 29/12/2024 (Còn 9 ngày)
+            </p>
+          </div>
+          <div class="flex flex-col space-y-2">
+            <button
+              class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >
+              ✅ Trả Sách
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sách đang mượn 2 -->
+      <div
+        class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500 slide-in"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-800">Cơ Sở Dữ Liệu</h4>
+            <p class="text-sm text-gray-600">👤 ND002 - Nguyễn Văn D</p>
+            <p class="text-sm text-gray-600">📅 Ngày mượn: 10/12/2024</p>
+            <p class="text-sm text-red-600 font-semibold">
+              ⏰ Hạn trả: 24/12/2024 (Quá hạn 4 ngày)
+            </p>
+          </div>
+          <div class="flex flex-col space-y-2">
+            <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+              >⚠️ Quá hạn</span
+            >
+            <button
+              class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >
+              ✅ Trả Sách
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sách đang mượn 3 -->
+      <div
+        class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500 slide-in"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-800">Tiếng Anh Giao Tiếp</h4>
+            <p class="text-sm text-gray-600">👤 ND003 - Lê Thị E</p>
+            <p class="text-sm text-gray-600">📅 Ngày mượn: 12/12/2024</p>
+            <p class="text-sm text-gray-600">
+              ⏰ Hạn trả: 26/12/2024 (Còn 6 ngày)
+            </p>
+          </div>
+          <div class="flex flex-col space-y-2">
+            <button
+              class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >
+              ✅ Trả Sách
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Lịch Sử -->
+  <div id="lichSu" class="borrow-content bg-gray-50 rounded-lg p-6 hidden">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">Lịch Sử Mượn/Trả Sách</h3>
+      <div class="text-sm text-gray-600">
+        Tổng giao dịch:
+        <span class="font-semibold text-green-600">15</span>
+      </div>
+    </div>
+    <div class="max-h-96 overflow-y-auto space-y-3">
+      <!-- Lịch sử 1 -->
+      <div
+        class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-800">Toán Cao Cấp</h4>
+            <p class="text-sm text-gray-600">👤 ND001 - Trần Thị C</p>
+            <p class="text-sm text-gray-600">
+              📅 Mượn: 01/12/2024 | Trả: 14/12/2024
+            </p>
+            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded"
+              >✅ Đã trả đúng hạn</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Lịch sử 2 -->
+      <div
+        class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500 slide-in"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-800">Tiếng Anh Cơ Bản</h4>
+            <p class="text-sm text-gray-600">👤 ND002 - Nguyễn Văn D</p>
+            <p class="text-sm text-gray-600">
+              📅 Mượn: 25/11/2024 | Trả: 12/12/2024
+            </p>
+            <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+              >⚠️ Trả muộn 3 ngày</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Lịch sử 3 -->
+      <div
+        class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in"
+      >
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-800">Vật Lý Đại Cương</h4>
+            <p class="text-sm text-gray-600">👤 ND003 - Lê Thị E</p>
+            <p class="text-sm text-gray-600">
+              📅 Mượn: 20/11/2024 | Trả: 02/12/2024
+            </p>
+            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded"
+              >✅ Đã trả đúng hạn</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Thống Kê -->
+  <div id="thongKe" class="borrow-content bg-gray-50 rounded-lg p-6 hidden">
+    <h3 class="text-lg font-semibold text-gray-800 mb-6">
+      Thống Kê Mượn/Trả Sách
+    </h3>
+
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+      <!-- Thống kê theo tháng -->
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <h4 class="font-semibold text-gray-800 mb-4">
+          📊 Thống Kê Tháng 12/2024
+        </h4>
+        <div class="space-y-3">
+          <div class="flex justify-between">
+            <span class="text-gray-600">Sách được mượn:</span>
+            <span class="font-semibold text-blue-600">28 cuốn</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Sách đã trả:</span>
+            <span class="font-semibold text-green-600">25 cuốn</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Trả muộn:</span>
+            <span class="font-semibold text-red-600">3 cuốn</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">Đang mượn:</span>
+            <span class="font-semibold text-orange-600">3 cuốn</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top sách được mượn nhiều -->
+      <div class="bg-white rounded-lg p-6 shadow-sm">
+        <h4 class="font-semibold text-gray-800 mb-4">
+          🏆 Top Sách Được Mượn Nhiều
+        </h4>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">1. Lập Trình Web</span>
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+              >8 lần</span
+            >
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">2. Cơ Sở Dữ Liệu</span>
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+              >6 lần</span
+            >
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">3. Toán Cao Cấp</span>
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+              >5 lần</span
+            >
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">4. Tiếng Anh Giao Tiếp</span>
+            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+              >4 lần</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thống kê theo người dùng -->
+    <div class="bg-white rounded-lg p-6 shadow-sm">
+      <h4 class="font-semibold text-gray-800 mb-4">
+        👥 Thống Kê Theo Người Dùng
+      </h4>
+      <div class="space-y-3">
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+          <div>
+            <span class="font-semibold text-gray-800">ND001 - Trần Thị C</span>
+            <p class="text-sm text-gray-600">Sinh viên</p>
+          </div>
+          <div class="text-right">
+            <div class="text-sm text-gray-600">
+              Đã mượn: <span class="font-semibold">12 cuốn</span>
+            </div>
+            <div class="text-sm text-gray-600">
+              Trả muộn:
+              <span class="font-semibold text-red-600">1 lần</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+          <div>
+            <span class="font-semibold text-gray-800"
+              >ND002 - Nguyễn Văn D</span
+            >
+            <p class="text-sm text-gray-600">Giảng viên</p>
+          </div>
+          <div class="text-right">
+            <div class="text-sm text-gray-600">
+              Đã mượn: <span class="font-semibold">8 cuốn</span>
+            </div>
+            <div class="text-sm text-gray-600">
+              Trả muộn:
+              <span class="font-semibold text-red-600">2 lần</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+          <div>
+            <span class="font-semibold text-gray-800">ND003 - Lê Thị E</span>
+            <p class="text-sm text-gray-600">Sinh viên</p>
+          </div>
+          <div class="text-right">
+            <div class="text-sm text-gray-600">
+              Đã mượn: <span class="font-semibold">6 cuốn</span>
+            </div>
+            <div class="text-sm text-gray-600">
+              Trả muộn:
+              <span class="font-semibold text-green-600">0 lần</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Thêm Sách với thiết kế đẹp -->
+<div
+  id="addBookModal"
+  class="fixed inset-0 modal-backdrop bg-black/50 hidden z-50 flex items-center justify-center p-4"
+>
+  <div
+    class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl mx-4 slide-in-right border border-white/20"
+  >
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-t-3xl">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center"
+          >
+            <span class="text-white text-xl">📚</span>
+          </div>
+          <h3 class="text-2xl font-bold text-white">Thêm Sách Mới</h3>
+        </div>
+        <button
+          onclick="closeAddBookModal()"
+          class="text-white/80 hover:text-white text-3xl transition-colors"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+
+    <form onsubmit="addNewBook(event)" class="p-8 space-y-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label
+            class="block text-sm font-bold text-gray-700 mb-3 flex items-center"
+          >
+            <span class="mr-2">📖</span> Tên Sách
+          </label>
+          <input
+            type="text"
+            name="bookName"
+            placeholder="Nhập tên sách..."
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-bold text-gray-700 mb-3 flex items-center"
+          >
+            <span class="mr-2">👤</span> Tác Giả
+          </label>
+          <input
+            type="text"
+            name="author"
+            placeholder="Nhập tên tác giả..."
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label
+            class="block text-sm font-bold text-gray-700 mb-3 flex items-center"
+          >
+            <span class="mr-2">🏷️</span> Thể Loại
+          </label>
+          <select
+            name="category"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+            required
+          >
+            <option value="">Chọn thể loại...</option>
+            <option value="cong-nghe">💻 Công Nghệ</option>
+            <option value="toan-hoc">🔢 Toán Học</option>
+            <option value="ngoai-ngu">🌍 Ngoại Ngữ</option>
+            <option value="van-hoc">📖 Văn Học</option>
+            <option value="khoa-hoc">🔬 Khoa Học</option>
+            <option value="kinh-te">💰 Kinh Tế</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-bold text-gray-700 mb-3 flex items-center"
+          >
+            <span class="mr-2">📦</span> Số Lượng
+          </label>
+          <input
+            type="number"
+            name="quantity"
+            placeholder="Nhập số lượng..."
+            min="0"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label
+          class="block text-sm font-bold text-gray-700 mb-3 flex items-center"
+        >
+          <span class="mr-2">📅</span> Năm Xuất Bản
+        </label>
+        <input
+          type="number"
+          name="publishYear"
+          placeholder="Nhập năm xuất bản..."
+          min="1900"
+          max="2024"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+          required
+        />
+      </div>
+
+      <div>
+        <label
+          class="block text-sm font-bold text-gray-700 mb-3 flex items-center"
+        >
+          <span class="mr-2">📝</span> Mô Tả (Tùy chọn)
+        </label>
+        <textarea
+          name="description"
+          placeholder="Nhập mô tả ngắn về sách..."
+          rows="4"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 resize-none"
+        ></textarea>
+      </div>
+
+      <div class="flex space-x-4 pt-6">
+        <button
+          type="submit"
+          class="flex-1 btn-primary text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg"
+        >
+          ➕ Thêm Sách
+        </button>
+        <button
+          type="button"
+          onclick="closeAddBookModal()"
+          class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-4 px-6 rounded-xl hover:shadow-lg transition-all duration-300 font-bold text-lg"
+        >
+          ❌ Hủy
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

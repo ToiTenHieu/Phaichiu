@@ -1,622 +1,331 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Lý Thư Viện</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .fade-in {
-            animation: fadeIn 0.3s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .slide-in {
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(-20px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-lg border-b-4 border-blue-500">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-blue-500 p-3 rounded-full">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Hệ Thống Quản Lý Thư Viện</h1>
-                        <p class="text-gray-600">Phần mềm quản lý sách và độc giả</p>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Thủ thư: <span class="font-semibold">Nguyễn Văn A</span></p>
-                    <p class="text-xs text-gray-500">20/12/2024 14:30:25</p>
-                    <button class="mt-2 text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors">
-                        👤 Thông Tin Cá Nhân
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "basee.html" %} {% block content %}
+<!-- Quản Lý Sách Section -->
+{% include "accounts/managebook.html" %}
+<!-- Quản Lý Mượn/Trả Section -->
+{% include "accounts/manageBorrow.html" %}
 
-    <div class="container mx-auto px-6 py-8">
-        <!-- Navigation Menu -->
-        <div class="bg-white rounded-xl shadow-lg mb-8 overflow-hidden">
-            <div class="flex flex-wrap">
-                <button onclick="showSection('quanLySach', this)" class="nav-btn flex-1 px-6 py-4 text-center font-semibold bg-blue-100 text-blue-600 transition-all duration-200 border-r border-gray-200">
-                    📚 Quản Lý Sách
-                </button>
-                <button onclick="showSection('muonTraSach', this)" class="nav-btn flex-1 px-6 py-4 text-center font-semibold text-gray-700 hover:bg-green-50 hover:text-green-600 transition-all duration-200 border-r border-gray-200">
-                    🔄 Mượn/Trả Sách
-                </button>
-                <button onclick="showSection('quanLyNguoiDung', this)" class="nav-btn flex-1 px-6 py-4 text-center font-semibold text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-all duration-200 border-r border-gray-200">
-                    👥 Quản Lý Người Dùng
-                </button>
-                <button onclick="showSection('kiemTraTinhTrang', this)" class="nav-btn flex-1 px-6 py-4 text-center font-semibold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all duration-200">
-                    📊 Kiểm Tra Tình Trạng
-                </button>
-            </div>
-        </div>
+<!-- Quản Lý Người Dùng Section -->
+<div
+  id="quanLyNguoiDung"
+  class="section bg-white rounded-xl shadow-lg p-6 mb-6 card-hover transition-all duration-300 hidden"
+>
+  <h2 class="text-2xl font-bold text-purple-600 mb-6 flex items-center">
+    👥 Quản Lý Người Dùng
+  </h2>
 
-        <!-- Quản Lý Sách Section -->
-        <div id="quanLySach" class="section bg-white rounded-xl shadow-lg p-6 mb-6 card-hover transition-all duration-300">
-            <h2 class="text-2xl font-bold text-blue-600 mb-6 flex items-center">
-                📚 Quản Lý Sách
-            </h2>
-            
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Form thêm sách -->
-                <div class="bg-blue-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-blue-800 mb-4">Thêm Sách Mới</h3>
-                    <form class="space-y-4">
-                        <input type="text" placeholder="Tên sách" class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                        <input type="text" placeholder="Tác giả" class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                        <input type="text" placeholder="Thể loại" class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                        <input type="number" placeholder="Số lượng" class="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
-                            ➕ Thêm Sách
-                        </button>
-                    </form>
-                </div>
+  <div class="grid md:grid-cols-2 gap-6">
+    <!-- Form thêm người dùng -->
+    <div class="bg-purple-50 rounded-lg p-6">
+      <h3 class="text-lg font-semibold text-purple-800 mb-4">
+        Thêm Người Dùng
+      </h3>
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <!-- username -->
+        <input
+          type="text"
+          name="username"
+          placeholder="Tên đăng nhập"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          required
+        />
 
-                <!-- Danh sách sách -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Danh Sách Sách</h3>
-                    <div class="max-h-80 overflow-y-auto space-y-3">
-                        <!-- Sách mẫu 1 -->
-                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in">
-                            <h4 class="font-semibold text-gray-800">Lập Trình Web</h4>
-                            <p class="text-sm text-gray-600">Tác giả: Nguyễn Văn B</p>
-                            <p class="text-sm text-gray-600">Thể loại: Công nghệ | Số lượng: 5</p>
-                            <div class="mt-2 flex space-x-2">
-                                <button class="text-xs bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">✏️ Sửa</button>
-                                <button class="text-xs bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑️ Xóa</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Sách mẫu 2 -->
-                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in">
-                            <h4 class="font-semibold text-gray-800">Cơ Sở Dữ Liệu</h4>
-                            <p class="text-sm text-gray-600">Tác giả: Trần Thị D</p>
-                            <p class="text-sm text-gray-600">Thể loại: Công nghệ | Số lượng: 3</p>
-                            <div class="mt-2 flex space-x-2">
-                                <button class="text-xs bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">✏️ Sửa</button>
-                                <button class="text-xs bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑️ Xóa</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Sách mẫu 3 -->
-                        <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in">
-                            <h4 class="font-semibold text-gray-800">Toán Cao Cấp</h4>
-                            <p class="text-sm text-gray-600">Tác giả: Lê Văn E</p>
-                            <p class="text-sm text-gray-600">Thể loại: Toán học | Số lượng: 4</p>
-                            <div class="mt-2 flex space-x-2">
-                                <button class="text-xs bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">✏️ Sửa</button>
-                                <button class="text-xs bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑️ Xóa</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- password -->
+        <input
+          type="password"
+          name="password"
+          placeholder="Mật khẩu"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          required
+        />
 
-        <!-- Quản Lý Mượn/Trả Section -->
-        <div id="muonTraSach" class="section bg-white rounded-xl shadow-lg p-6 mb-6 card-hover transition-all duration-300 hidden">
-            <h2 class="text-2xl font-bold text-green-600 mb-6 flex items-center">
-                🔄 Quản Lý Mượn/Trả Sách
-            </h2>
-            
-            <!-- Navigation tabs cho mượn/trả -->
-            <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
-                <button onclick="showBorrowTab('dangMuon', this)" class="borrow-tab flex-1 px-4 py-2 text-center font-semibold rounded-md bg-green-500 text-white transition-all duration-200">
-                    📋 Đang Mượn
-                </button>
-                <button onclick="showBorrowTab('lichSu', this)" class="borrow-tab flex-1 px-4 py-2 text-center font-semibold text-gray-600 hover:text-green-600 transition-all duration-200">
-                    📚 Lịch Sử
-                </button>
-                <button onclick="showBorrowTab('thongKe', this)" class="borrow-tab flex-1 px-4 py-2 text-center font-semibold text-gray-600 hover:text-green-600 transition-all duration-200">
-                    👥 Thống Kê
-                </button>
-            </div>
+        <!-- name -->
+        <input
+          type="text"
+          name="name"
+          placeholder="Họ và tên"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          required
+        />
 
-            <!-- Tab Danh sách đang mượn -->
-            <div id="dangMuon" class="borrow-content bg-gray-50 rounded-lg p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Sách Đang Được Mượn</h3>
-                    <div class="text-sm text-gray-600">
-                        Tổng: <span class="font-semibold text-green-600">3</span> cuốn
-                    </div>
-                </div>
-                <div class="max-h-96 overflow-y-auto space-y-3">
-                    <!-- Sách đang mượn 1 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500 slide-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800">Lập Trình Web</h4>
-                                <p class="text-sm text-gray-600">👤 ND001 - Trần Thị C</p>
-                                <p class="text-sm text-gray-600">📅 Ngày mượn: 15/12/2024</p>
-                                <p class="text-sm text-gray-600">⏰ Hạn trả: 29/12/2024 (Còn 9 ngày)</p>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                    ✅ Trả Sách
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <!-- occupation -->
+        <input
+          type="text"
+          name="occupation"
+          placeholder="Nghề nghiệp (VD: Sinh viên, Giảng viên)"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        />
 
-                    <!-- Sách đang mượn 2 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500 slide-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800">Cơ Sở Dữ Liệu</h4>
-                                <p class="text-sm text-gray-600">👤 ND002 - Nguyễn Văn D</p>
-                                <p class="text-sm text-gray-600">📅 Ngày mượn: 10/12/2024</p>
-                                <p class="text-sm text-red-600 font-semibold">⏰ Hạn trả: 24/12/2024 (Quá hạn 4 ngày)</p>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">⚠️ Quá hạn</span>
-                                <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                    ✅ Trả Sách
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <!-- address -->
+        <input
+          type="text"
+          name="address"
+          placeholder="Địa chỉ"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        />
 
-                    <!-- Sách đang mượn 3 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500 slide-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800">Tiếng Anh Giao Tiếp</h4>
-                                <p class="text-sm text-gray-600">👤 ND003 - Lê Thị E</p>
-                                <p class="text-sm text-gray-600">📅 Ngày mượn: 12/12/2024</p>
-                                <p class="text-sm text-gray-600">⏰ Hạn trả: 26/12/2024 (Còn 6 ngày)</p>
-                            </div>
-                            <div class="flex flex-col space-y-2">
-                                <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                    ✅ Trả Sách
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- date_of_birth -->
+        <input
+          type="date"
+          name="date_of_birth"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          required
+        />
 
-            <!-- Tab Lịch Sử -->
-            <div id="lichSu" class="borrow-content bg-gray-50 rounded-lg p-6 hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Lịch Sử Mượn/Trả Sách</h3>
-                    <div class="text-sm text-gray-600">
-                        Tổng giao dịch: <span class="font-semibold text-green-600">15</span>
-                    </div>
-                </div>
-                <div class="max-h-96 overflow-y-auto space-y-3">
-                    <!-- Lịch sử 1 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800">Toán Cao Cấp</h4>
-                                <p class="text-sm text-gray-600">👤 ND001 - Trần Thị C</p>
-                                <p class="text-sm text-gray-600">📅 Mượn: 01/12/2024 | Trả: 14/12/2024</p>
-                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">✅ Đã trả đúng hạn</span>
-                            </div>
-                        </div>
-                    </div>
+        <!-- gender -->
+        <select
+          name="gender"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          required
+        >
+          <option value="">Chọn giới tính</option>
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
+          <option value="other">Khác</option>
+        </select>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          class="w-full px-4 py-2 border rounded-lg"
+          required
+        />
+        <!-- phone -->
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Số điện thoại"
+          class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        />
 
-                    <!-- Lịch sử 2 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-500 slide-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800">Tiếng Anh Cơ Bản</h4>
-                                <p class="text-sm text-gray-600">👤 ND002 - Nguyễn Văn D</p>
-                                <p class="text-sm text-gray-600">📅 Mượn: 25/11/2024 | Trả: 12/12/2024</p>
-                                <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">⚠️ Trả muộn 3 ngày</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lịch sử 3 -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500 slide-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800">Vật Lý Đại Cương</h4>
-                                <p class="text-sm text-gray-600">👤 ND003 - Lê Thị E</p>
-                                <p class="text-sm text-gray-600">📅 Mượn: 20/11/2024 | Trả: 02/12/2024</p>
-                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">✅ Đã trả đúng hạn</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab Thống Kê -->
-            <div id="thongKe" class="borrow-content bg-gray-50 rounded-lg p-6 hidden">
-                <h3 class="text-lg font-semibold text-gray-800 mb-6">Thống Kê Mượn/Trả Sách</h3>
-                
-                <div class="grid md:grid-cols-2 gap-6 mb-6">
-                    <!-- Thống kê theo tháng -->
-                    <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <h4 class="font-semibold text-gray-800 mb-4">📊 Thống Kê Tháng 12/2024</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Sách được mượn:</span>
-                                <span class="font-semibold text-blue-600">28 cuốn</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Sách đã trả:</span>
-                                <span class="font-semibold text-green-600">25 cuốn</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Trả muộn:</span>
-                                <span class="font-semibold text-red-600">3 cuốn</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Đang mượn:</span>
-                                <span class="font-semibold text-orange-600">3 cuốn</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Top sách được mượn nhiều -->
-                    <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <h4 class="font-semibold text-gray-800 mb-4">🏆 Top Sách Được Mượn Nhiều</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">1. Lập Trình Web</span>
-                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">8 lần</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">2. Cơ Sở Dữ Liệu</span>
-                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">6 lần</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">3. Toán Cao Cấp</span>
-                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">5 lần</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600">4. Tiếng Anh Giao Tiếp</span>
-                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">4 lần</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thống kê theo người dùng -->
-                <div class="bg-white rounded-lg p-6 shadow-sm">
-                    <h4 class="font-semibold text-gray-800 mb-4">👥 Thống Kê Theo Người Dùng</h4>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
-                            <div>
-                                <span class="font-semibold text-gray-800">ND001 - Trần Thị C</span>
-                                <p class="text-sm text-gray-600">Sinh viên</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-sm text-gray-600">Đã mượn: <span class="font-semibold">12 cuốn</span></div>
-                                <div class="text-sm text-gray-600">Trả muộn: <span class="font-semibold text-red-600">1 lần</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
-                            <div>
-                                <span class="font-semibold text-gray-800">ND002 - Nguyễn Văn D</span>
-                                <p class="text-sm text-gray-600">Giảng viên</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-sm text-gray-600">Đã mượn: <span class="font-semibold">8 cuốn</span></div>
-                                <div class="text-sm text-gray-600">Trả muộn: <span class="font-semibold text-red-600">2 lần</span></div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
-                            <div>
-                                <span class="font-semibold text-gray-800">ND003 - Lê Thị E</span>
-                                <p class="text-sm text-gray-600">Sinh viên</p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-sm text-gray-600">Đã mượn: <span class="font-semibold">6 cuốn</span></div>
-                                <div class="text-sm text-gray-600">Trả muộn: <span class="font-semibold text-green-600">0 lần</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quản Lý Người Dùng Section -->
-        <div id="quanLyNguoiDung" 
-     class="section bg-white rounded-xl shadow-lg p-6 mb-6 card-hover transition-all duration-300 hidden">
-
-    <h2 class="text-2xl font-bold text-purple-600 mb-6 flex items-center">
-        👥 Quản Lý Người Dùng
-    </h2>
-    
-    <div class="grid md:grid-cols-2 gap-6">
-        <!-- Form thêm người dùng -->
-        <div class="bg-purple-50 rounded-lg p-6">
-            <h3 class="text-lg font-semibold text-purple-800 mb-4">Thêm Người Dùng</h3>
-            <form method="post" class="space-y-4">
-                {% csrf_token %}
-                <input type="text" name="username" placeholder="Mã người dùng" 
-                       class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
-                
-                <input type="password" name="password" placeholder="Mật khẩu" 
-                       class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
-                
-                <input type="text" name="first_name" placeholder="Họ" 
-                       class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                
-                <input type="text" name="last_name" placeholder="Tên" 
-                       class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                
-                <input type="email" name="email" placeholder="Email" 
-                       class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                
-                <input type="tel" name="phone_number" placeholder="Số điện thoại" 
-                       class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                
-                <select name="role" 
-                        class="w-full px-4 py-2 border border-purple-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
-                    <option value="">Chọn loại người dùng</option>
-                    <option value="sinh-vien">Sinh viên</option>
-                    <option value="thu-thu">Thủ thư</option>
-                </select>
-
-                <button type="submit" 
-                        class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-semibold">
-                    ➕ Thêm Người Dùng
-                </button>
-            </form>
-        </div>
-
-        <!-- Danh sách người dùng -->
-<div class="max-w-4xl mx-auto mt-8 space-y-4">
-    <h2 class="text-2xl font-bold text-purple-700 mb-6 border-b pb-2">
-        Danh sách người dùng
-    </h2>
-
-    {% for user in users %}
-    <div
-        class="bg-gradient-to-r from-purple-50 to-white p-5 rounded-xl shadow hover:shadow-md transition duration-200 border border-purple-100">
-        <div class="flex justify-between items-start">
-            <div>
-                <h4 class="text-lg font-semibold text-gray-800 mb-1">
-                    {{ user.user.username }}
-                    <span class="text-gray-500">– {{ user.get_full_name }}</span>
-                </h4>
-                <p class="text-sm text-gray-600">
-                    📧 <span class="font-medium">{{ user.user.email }}</span>
-                </p>
-                <p class="text-sm text-gray-600 mt-1">
-                    📞 {{ user.phone }}
-                    <span class="mx-2">|</span>
-                    Loại:
-                    {% if user.role == 'user' %}
-                        <span class="font-medium text-blue-600">Sinh viên</span>
-                    {% elif user.role == 'librarian' %}
-                        <span class="font-medium text-green-600">Thủ thư</span>
-                    {% else %}
-                        <span class="font-medium">{{ user.role }}</span>
-                    {% endif %}
-                </p>
-            </div>
-            <div class="flex space-x-2">
-                <button
-                    class="text-xs bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600 transition">
-                    ✏️ Sửa
-                </button>
-                <button
-                    class="text-xs bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition">
-                    🗑️ Xóa
-                </button>
-            </div>
-        </div>
+        <button
+          type="submit"
+          class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-semibold"
+        >
+          ➕ Thêm Người Dùng
+        </button>
+      </form>
     </div>
-    {% empty %}
-    <p class="text-sm text-gray-500 italic">Chưa có người dùng nào.</p>
-    {% endfor %}
+
+    <!-- Danh sách người dùng -->
+    <div class="max-w-4xl mx-auto mt-8 space-y-4">
+      <h2 class="text-2xl font-bold text-purple-700 mb-6 border-b pb-2">
+        Danh sách người dùng
+      </h2>
+      {% if messages %}
+      <div id="messages-container" class="container mx-auto mt-4">
+        {% for message in messages %}
+        <div
+          class="p-4 mb-4 rounded-lg transition-opacity duration-500 {% if message.tags == 'success' %}bg-green-100 text-green-800 {% elif message.tags == 'error' %}bg-red-100 text-red-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+
+      <script>
+        setTimeout(() => {
+          const container = document.getElementById("messages-container");
+          if (container) {
+            container.style.opacity = "0"; // làm mờ dần
+            setTimeout(() => container.remove(), 500); // xoá hẳn sau khi mờ
+          }
+        }, 3000); // 3 giây
+      </script>
+      {% endif %} {% for user in users %}
+      <div
+        class="bg-gradient-to-r from-purple-50 to-white p-5 rounded-xl shadow hover:shadow-md transition duration-200 border border-purple-100"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-1">
+              {{ user.user.username }}
+              <span class="text-gray-500">– {{ user.get_full_name }}</span>
+            </h4>
+            <p class="text-sm text-gray-600">
+              📧 <span class="font-medium">{{ user.user.email }}</span>
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+              📞 {{ user.phone }}
+              <span class="mx-2">|</span>
+              Loại: {% if user.role == 'user' %}
+              <span class="font-medium text-blue-600">Sinh viên</span>
+              {% elif user.role == 'librarian' %}
+              <span class="font-medium text-green-600">Thủ thư</span>
+              {% else %}
+              <span class="font-medium">{{ user.role }}</span>
+              {% endif %}
+            </p>
+          </div>
+          <div class="flex space-x-2">
+            <a
+              href="{% url 'edit_user' user.id %}?section=quanLyNguoiDung"
+              class="text-xs bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600 transition"
+            >
+              ✏️ Sửa
+            </a>
+<!-- Button Xóa Người Dùng -->
+<button
+  type="button"
+  onclick="deleteUser({{ user.id }})"
+  class="text-xs bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition"
+>
+  🗑️ Xóa
+</button>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function deleteUser(userId) {
+    Swal.fire({
+        title: "⚠️ Bạn có chắc chắn?",
+        text: "Người dùng sẽ bị xóa vĩnh viễn và không thể khôi phục!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "🗑️ Xóa",
+        cancelButtonText: "❌ Hủy",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/accounts/api/users/${userId}/delete/`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"), // dùng CSRF nếu bật
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Không thể xoá người dùng");
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire({
+                    title: "Đã xóa!",
+                    text: data.message || "Người dùng đã được xóa thành công.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    location.reload();
+                });
+            })
+            .catch(error => {
+                Swal.fire("Lỗi!", "Không thể xoá người dùng. Vui lòng thử lại!", "error");
+            });
+        }
+    });
+}
+</script>
+
+            </form>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-sm text-gray-500 italic">Chưa có người dùng nào.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<!-- Kiểm Tra Tình Trạng Section -->
+{% include "accounts/bookstatistics.html" %}
+
+<!-- Modal Thông Tin Cá Nhân (Ẩn) -->
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center"
+>
+  <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-xl font-bold text-blue-600">👤 Thông Tin Cá Nhân</h3>
+      <button class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+    </div>
+
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2"
+          >Username</label
+        >
+        <input
+          type="text"
+          value="admin"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2"
+          >Password</label
+        >
+        <div class="relative">
+          <input
+            type="password"
+            value="123456"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
+            required
+          />
+          <button
+            type="button"
+            class="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+          >
+            👁️
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2"
+          >Họ và Tên</label
+        >
+        <input
+          type="text"
+          value="Nguyễn Văn A"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2"
+          >Email</label
+        >
+        <input
+          type="email"
+          value="admin@thuvien.com"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          required
+        />
+      </div>
+
+      <div class="flex space-x-3 pt-4">
+        <button
+          type="submit"
+          class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+        >
+          💾 Lưu Thay Đổi
+        </button>
+        <button
+          type="button"
+          class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors font-semibold"
+        >
+          ❌ Hủy
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
-
-
-        <!-- Kiểm Tra Tình Trạng Section -->
-        <div id="kiemTraTinhTrang" class="section bg-white rounded-xl shadow-lg p-6 mb-6 card-hover transition-all duration-300 hidden">
-            <h2 class="text-2xl font-bold text-orange-600 mb-6 flex items-center">
-                📊 Kiểm Tra Tình Trạng Sách
-            </h2>
-            
-            <div class="grid md:grid-cols-3 gap-6 mb-6">
-                <!-- Thống kê tổng quan -->
-                <div class="bg-blue-50 rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-blue-600">125</div>
-                    <p class="text-blue-800 font-semibold">Tổng Số Sách</p>
-                </div>
-                <div class="bg-green-50 rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-green-600">23</div>
-                    <p class="text-green-800 font-semibold">Đang Được Mượn</p>
-                </div>
-                <div class="bg-red-50 rounded-lg p-6 text-center">
-                    <div class="text-3xl font-bold text-red-600">5</div>
-                    <p class="text-red-800 font-semibold">Quá Hạn Trả</p>
-                </div>
-            </div>
-
-            <!-- Tìm kiếm sách -->
-            <div class="bg-orange-50 rounded-lg p-6 mb-6">
-                <h3 class="text-lg font-semibold text-orange-800 mb-4">Tìm Kiếm Sách</h3>
-                <div class="flex space-x-4">
-                    <input type="text" placeholder="Nhập tên sách, tác giả hoặc mã sách..." class="flex-1 px-4 py-2 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
-                    <button class="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 font-semibold">
-                        🔍 Tìm Kiếm
-                    </button>
-                </div>
-            </div>
-
-            <!-- Kết quả tìm kiếm -->
-            <div class="bg-gray-50 rounded-lg p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Kết Quả Tìm Kiếm</h3>
-                <div class="space-y-3">
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange-500 slide-in">
-                        <h4 class="font-semibold text-gray-800">Lập Trình Web</h4>
-                        <p class="text-sm text-gray-600">Tác giả: Nguyễn Văn B | Thể loại: Công nghệ</p>
-                        <div class="mt-2 flex items-center space-x-4">
-                            <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Còn: 3 cuốn</span>
-                            <span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Đang mượn: 2 cuốn</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-orange-500 slide-in">
-                        <h4 class="font-semibold text-gray-800">Cơ Sở Dữ Liệu</h4>
-                        <p class="text-sm text-gray-600">Tác giả: Trần Thị D | Thể loại: Công nghệ</p>
-                        <div class="mt-2 flex items-center space-x-4">
-                            <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Còn: 2 cuốn</span>
-                            <span class="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Đang mượn: 1 cuốn</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Thông Tin Cá Nhân (Ẩn) -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 fade-in">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-blue-600">👤 Thông Tin Cá Nhân</h3>
-                <button class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
-            </div>
-            
-            <form class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
-                    <input type="text" value="admin" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
-                    <div class="relative">
-                        <input type="password" value="123456" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10" required>
-                        <button type="button" class="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700">
-                            👁️
-                        </button>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Họ và Tên</label>
-                    <input type="text" value="Nguyễn Văn A" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                    <input type="email" value="admin@thuvien.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                </div>
-                
-                <div class="flex space-x-3 pt-4">
-                    <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
-                        💾 Lưu Thay Đổi
-                    </button>
-                    <button type="button" class="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors font-semibold">
-                        ❌ Hủy
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // Chuyển đổi giữa các section
-        function showSection(sectionName, buttonElement) {
-            // Ẩn tất cả sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.add('hidden');
-            });
-            
-            // Hiển thị section được chọn
-            document.getElementById(sectionName).classList.remove('hidden');
-            document.getElementById(sectionName).classList.add('fade-in');
-            
-            // Cập nhật active state cho navigation buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-100', 'text-blue-600', 'bg-green-100', 'text-green-600', 'bg-purple-100', 'text-purple-600', 'bg-orange-100', 'text-orange-600');
-                btn.classList.add('text-gray-700');
-            });
-            
-            // Thêm active state cho button được click
-            if (buttonElement) {
-                buttonElement.classList.remove('text-gray-700');
-                if (sectionName === 'quanLySach') {
-                    buttonElement.classList.add('bg-blue-100', 'text-blue-600');
-                } else if (sectionName === 'muonTraSach') {
-                    buttonElement.classList.add('bg-green-100', 'text-green-600');
-                } else if (sectionName === 'quanLyNguoiDung') {
-                    buttonElement.classList.add('bg-purple-100', 'text-purple-600');
-                } else if (sectionName === 'kiemTraTinhTrang') {
-                    buttonElement.classList.add('bg-orange-100', 'text-orange-600');
-                }
-            }
-        }
-
-        // Chuyển đổi giữa các tab trong section Mượn/Trả Sách
-        function showBorrowTab(tabName, buttonElement) {
-            // Ẩn tất cả borrow content
-            document.querySelectorAll('.borrow-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            
-            // Hiển thị tab được chọn
-            document.getElementById(tabName).classList.remove('hidden');
-            document.getElementById(tabName).classList.add('fade-in');
-            
-            // Cập nhật active state cho borrow tab buttons
-            document.querySelectorAll('.borrow-tab').forEach(btn => {
-                btn.classList.remove('bg-green-500', 'text-white');
-                btn.classList.add('text-gray-600');
-            });
-            
-            // Thêm active state cho button được click
-            if (buttonElement) {
-                buttonElement.classList.remove('text-gray-600');
-                buttonElement.classList.add('bg-green-500', 'text-white');
-            }
-        }
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98373edb10a204b9',t:'MTc1ODYwMTE4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+{% endblock %}
