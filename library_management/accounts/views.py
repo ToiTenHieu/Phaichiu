@@ -229,6 +229,64 @@ def services(request):
     return render(request, "accounts/services.html")  # tạo template services.html
 def contact(request):
     return render(request, "accounts/contact.html")  # tạo template contact.html
+@login_required
+def payment(request):
+    return render(request, "accounts/payment.html")  # tạo template payment.html
+@login_required
+def membership(request):
+    profile = UserProfile.objects.get(user=request.user)
+    privileges = profile.get_privileges()
+    current_rank = profile.membership_level  # ví dụ: "basic", "premium", "vip"
+    return render(request, "accounts/membership.html",
+                  {"profile": profile,
+                   "privileges": privileges,
+                   "current_rank": current_rank
+                   })
+
+@login_required
+def upgrade_membership(request, level):
+    profile = UserProfile.objects.get(user=request.user)
+
+    if profile.upgrade_membership(level):
+        messages.success(request, f"Bạn đã nâng cấp thành công lên {dict(UserProfile.MEMBERSHIP_CHOICES)[level]}")
+    else:
+        messages.warning(request, "Bạn không thể hạ cấp hoặc giữ nguyên cấp thành viên.")
+
+    return redirect('profile_view')  #p Chuyển hướng về trang profile
+
+@login_required
+def payment(request):
+    level = request.GET.get("level", "basic")  # lấy gói user chọn
+    level_map = {
+        "basic": "Cơ bản",
+        "standard": "Tiêu chuẩn",
+        "premium": "Cao cấp",
+    }
+    level_name = level_map.get(level, "Cơ bản")
+
+    return render(request, "accounts/payment.html", {
+        "level": level,
+        "level_name": level_name,
+    })
+@login_required
+def process_payment(request):
+    if request.method == "POST":
+        level = request.POST.get("level", "basic")
+        
+        # Lấy profile của user hiện tại
+        profile = request.user.userprofile
+        
+        # Cập nhật gói membership
+        profile.membership_level = level
+        profile.save()
+
+        messages.success(request, f"Bạn đã nâng cấp thành công lên gói {level}!")
+        return redirect("payment_done")  # sau khi thanh toán xong quay lại trang membership
+    
+    return redirect("payment_done")
+@login_required
+def payment_done(request):
+    return render(request, "accounts/payment_done.html")  
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import UserProfile  # model chứa phone, address, gender,...
 

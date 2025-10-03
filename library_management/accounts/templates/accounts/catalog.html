@@ -113,10 +113,10 @@
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center max-h-960 overflow-y-auto scrollbar-hide"
   >
     {% for book in page_obj %}
-    <div
-      class="book-item book-card w-83 min-h-[250px] p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 fade-in-up"
-      data-category="{{ book.category|slugify }}"
-    >
+<div
+  class="book-item book-card w-[360px] min-h-[250px] p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 fade-in-up"
+  data-category="{{ book.category|slugify }}"
+>
       <div class="flex justify-between items-start">
         <div class="flex-1">
           <div class="flex items-center space-x-3 mb-3">
@@ -125,7 +125,7 @@
             >
               <span class="text-white text-sm"> 📚 </span>
             </div>
-            <h4 class="text-xl font-bold text-gray-800">{{ book.title }}</h4>
+            <h4 class="text-xl font-bold text-gray-800 break-words line-clamp-2 ">{{ book.title }}</h4>
           </div>
 
           <!-- Thông tin sách -->
@@ -221,24 +221,7 @@
 
     <script>
         // Extended book data
-        const books = [
-            { id: 1, title: "Đắc Nhân Tâm", author: "Dale Carnegie", category: "fiction", available: true, rating: 4.8, year: 2018 },
-            { id: 2, title: "Sapiens", author: "Yuval Noah Harari", category: "history", available: true, rating: 4.9, year: 2020 },
-            { id: 3, title: "Tư Duy Nhanh Và Chậm", author: "Daniel Kahneman", category: "science", available: false, rating: 4.7, year: 2019 },
-            { id: 4, title: "Clean Code", author: "Robert C. Martin", category: "technology", available: true, rating: 4.6, year: 2021 },
-            { id: 5, title: "Nhà Giả Kim", author: "Paulo Coelho", category: "fiction", available: true, rating: 4.5, year: 2017 },
-            { id: 6, title: "Lược Sử Thời Gian", author: "Stephen Hawking", category: "science", available: true, rating: 4.8, year: 2020 },
-            { id: 7, title: "Việt Nam Sử Lược", author: "Trần Trọng Kim", category: "history", available: true, rating: 4.4, year: 2019 },
-            { id: 8, title: "JavaScript: The Good Parts", author: "Douglas Crockford", category: "technology", available: false, rating: 4.3, year: 2018 },
-            { id: 9, title: "Nghệ Thuật Bán Hàng", author: "Brian Tracy", category: "business", available: true, rating: 4.2, year: 2021 },
-            { id: 10, title: "Lịch Sử Nghệ Thuật", author: "Ernst Gombrich", category: "art", available: true, rating: 4.6, year: 2020 },
-            { id: 11, title: "Tâm Lý Học Tội Phạm", author: "Robert Hare", category: "science", available: true, rating: 4.4, year: 2019 },
-            { id: 12, title: "Chiến Tranh Và Hòa Bình", author: "Leo Tolstoy", category: "fiction", available: false, rating: 4.7, year: 2018 },
-            { id: 13, title: "Khởi Nghiệp Tinh Gọn", author: "Eric Ries", category: "business", available: true, rating: 4.3, year: 2020 },
-            { id: 14, title: "Vẽ Chân Dung", author: "Andrew Loomis", category: "art", available: true, rating: 4.5, year: 2021 },
-            { id: 15, title: "Lịch Sử Thế Giới", author: "H.G. Wells", category: "history", available: true, rating: 4.6, year: 2019 },
-            { id: 16, title: "Python Crash Course", author: "Eric Matthes", category: "technology", available: true, rating: 4.7, year: 2021 }
-        ];
+
 
         let currentPage = 1;
         let itemsPerPage = 12;
