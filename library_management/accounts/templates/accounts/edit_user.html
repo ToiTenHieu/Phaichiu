@@ -1,14 +1,19 @@
 {% extends "basee.html" %}
 {% block content %}
-<!-- edit_user.html -->
- <!-- Quản Lý Sách Section -->
- {% include "accounts/managebook.html" %}
-<!-- Quản Lý Mượn/Trả Section -->
-{% include "accounts/manageBorrow.html" %}
+<!-- Overlay chặn tác vụ khác -->
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 z-40"></div>
+
+<!-- Quản Lý Sách Section -->
+<div id="lockedContent" class="locked">
+  {% include "accounts/managebook.html" %}
+  {% include "accounts/manageBorrow.html" %}
+  {% include "accounts/bookstatistics.html" %}
+</div>
+
 <!-- Giao diện Chỉnh Sửa Người Dùng -->
 <div
   id="quanLyNguoiDung"
-  class="section bg-white rounded-2xl shadow-lg p-6 mb-6 card-hover transition-all duration-300"
+  class="section bg-white rounded-2xl shadow-lg p-6 mb-6 card-hover transition-all duration-300 relative z-50"
 >
   <!-- Header -->
   <div class="bg-gradient-to-r from-blue-500 to-purple-500 p-4 rounded-t-2xl -mx-6 -mt-6 mb-6 flex items-center justify-between">
@@ -57,18 +62,32 @@
     <!-- Nút -->
     <div class="flex justify-end gap-3 pt-4">
       <button type="submit" 
-              class="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium hover:opacity-90">
+              class="px-5 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-medium hover:opacity-90"
+              onclick="unlockPage()">
         ✔ Lưu
       </button>
       <a href="{% url 'librarian_dashboard' %}?section=quanLyNguoiDung"
-         class="px-5 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 text-white font-medium">
+         class="px-5 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 text-white font-medium"
+         onclick="unlockPage()">
         ✖ Huỷ
       </a>
     </div>
   </form>
 </div>
 
+<style>
+/* Khóa toàn bộ phần khác */
+.locked {
+  pointer-events: none;
+  opacity: 0.4;
+}
+</style>
 
-{% include "accounts/bookstatistics.html" %}
-
+<script>
+function unlockPage() {
+  // Bỏ overlay và cho phép click các phần khác
+  document.getElementById("overlay").remove();
+  document.getElementById("lockedContent").classList.remove("locked");
+}
+</script>
 {% endblock %}

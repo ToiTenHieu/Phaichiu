@@ -58,6 +58,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+from django.core.paginator import Paginator
+from django.urls import reverse
+
 @login_required
 def librarian_dashboard(request):
     profile = UserProfile.objects.get(user=request.user)
@@ -96,16 +99,22 @@ def librarian_dashboard(request):
         )
 
         return redirect(reverse("librarian_dashboard") + "?section=quanLyNguoiDung")
-    
-    # 👉 Nếu GET: load tất cả dữ liệu
-    users_only = UserProfile.objects.filter(role='user')
+
+    # 👉 Nếu GET: load dữ liệu
+    users_only = UserProfile.objects.filter(role='user').order_by("id")
+
+    # --- Thêm phân trang ---
+    paginator = Paginator(users_only, 5)  # 10 user mỗi trang
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     books = Book.objects.all()
     categories = Book.objects.values_list('category', flat=True).distinct()
-
     librarian_name = profile.name or profile.user.username
 
     context = {
-        'users': users_only,
+        'users': page_obj.object_list,   # user của trang hiện tại
+        'page_obj': page_obj,            # để làm thanh phân trang
         'books': books,
         'categories': categories,
         'librarian_name': librarian_name,
@@ -205,8 +214,17 @@ def danh_sach_nguoi_dung(request):
     return render(request, 'users_list.html', {'users': users})
 
 
+from django.core.paginator import Paginator
+
 def catalog(request):
-    return render(request, "accounts/catalog.html")  # tạo template catalog.html
+    books = Book.objects.all().order_by("-book_id")   # lấy danh sách sách
+    paginator = Paginator(books, 8)  # 8 sách / trang
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "accounts/catalog.html", {"page_obj": page_obj})
+
 def services(request):
     return render(request, "accounts/services.html")  # tạo template services.html
 def contact(request):

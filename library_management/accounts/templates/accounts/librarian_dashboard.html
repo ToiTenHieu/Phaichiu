@@ -158,20 +158,21 @@
             </p>
           </div>
           <div class="flex space-x-2">
-            <a
-              href="{% url 'edit_user' user.id %}?section=quanLyNguoiDung"
-              class="text-xs bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600 transition"
-            >
-              ✏️ Sửa
-            </a>
-<!-- Button Xóa Người Dùng -->
-<button
-  type="button"
-  onclick="deleteUser({{ user.id }})"
-  class="text-xs bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition"
->
-  🗑️ Xóa
-</button>
+        <a
+          href="{% url 'edit_user' user.id %}?section=quanLyNguoiDung&page={{ page_obj.number }}"
+          class="text-xs bg-yellow-500 text-white px-3 py-1 rounded-full hover:bg-yellow-600 transition"
+        >
+          ✏️ Sửa
+        </a>
+        <!-- Button Xóa Người Dùng -->
+        <button
+          type="button"
+          onclick="deleteUser({{ user.id }}, {{ page_obj.number }})"
+          class="text-xs bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition"
+        >
+          🗑️ Xóa
+        </button>
+        
 
 <script>
 function getCookie(name) {
@@ -237,6 +238,44 @@ function deleteUser(userId) {
       {% empty %}
       <p class="text-sm text-gray-500 italic">Chưa có người dùng nào.</p>
       {% endfor %}
+      {% if page_obj.has_other_pages %}
+        <div class="flex justify-center mt-6 space-x-2">
+          
+          {% if page_obj.has_previous %}
+            <a
+              href="?section=quanLyNguoiDung&page={{ page_obj.previous_page_number }}"
+              class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+            >
+              ⬅ Trước
+            </a>
+          {% endif %}
+      
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="px-3 py-1 bg-purple-500 text-white rounded">
+                {{ num }}
+              </span>
+            {% else %}
+              <a
+                href="?section=quanLyNguoiDung&page={{ num }}"
+                class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+              >
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+      
+          {% if page_obj.has_next %}
+            <a
+              href="?section=quanLyNguoiDung&page={{ page_obj.next_page_number }}"
+              class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+            >
+              Sau ➡
+            </a>
+          {% endif %}
+          
+        </div>
+      {% endif %}
     </div>
   </div>
 </div>

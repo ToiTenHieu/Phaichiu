@@ -232,7 +232,23 @@
               <p class="text-white/90 font-semibold">
                 👋 Xin chào, <span class="text-yellow-300">Nguyễn Văn A</span>
               </p>
-              <p class="text-white/70 text-sm">🕐 20/12/2024 - 14:30:25</p>
+              <p id="real-time" class="text-xs text-gray-500"></p>
+              <script>
+                function updateTime() {
+                  const now = new Date();
+                  const formatted = now.toLocaleString("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  });
+                  document.getElementById("real-time").textContent = formatted;
+                }
+                updateTime();
+                setInterval(updateTime, 1000);
+              </script>
               <button
                 class="mt-2 bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-all duration-300 text-sm font-medium"
               >
