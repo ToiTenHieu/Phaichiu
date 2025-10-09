@@ -158,30 +158,42 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserForm, UserProfileForm
 
+# accounts/views.py
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import UserForm, UserProfileForm
+from .models import UserProfile # Đảm bảo bạn đã import UserProfile
+
 @login_required
 def profile_view(request):
     user = request.user
-    profile = user.userprofile
+    # Dùng get_or_create để đảm bảo profile luôn tồn tại, tránh lỗi
+    profile, created = UserProfile.objects.get_or_create(user=user)
 
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=user)
-        profile_form = UserProfileForm(request.POST, instance=profile)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             messages.success(request, "Cập nhật thông tin thành công!")
-            return redirect("profile_view")
+            return redirect("profile_view") # Tên URL của chính view này
         else:
-            messages.error(request, "Có lỗi xảy ra, vui lòng kiểm tra lại.")
+            messages.error(request, "Có lỗi xảy ra, vui lòng kiểm tra lại các trường thông tin.")
     else:
         user_form = UserForm(instance=user)
         profile_form = UserProfileForm(instance=profile)
 
-    return render(request, "accounts/profile.html", {
+    # Thêm user và date_joined vào context để hiển thị trong template
+    context = {
         "user_form": user_form,
         "profile_form": profile_form,
-    })
+        "user": user, # Để tiện truy cập các thông tin như username, date_joined
+    }
+    return render(request, "accounts/profile.html", context)
 
 
 # views.py
@@ -227,11 +239,18 @@ def catalog(request):
 
 def services(request):
     return render(request, "accounts/services.html")  # tạo template services.html
+from django.conf import settings # Import settings
+
 def contact(request):
-    return render(request, "accounts/contact.html")  # tạo template contact.html
-@login_required
-def payment(request):
-    return render(request, "accounts/payment.html")  # tạo template payment.html
+    latitude = 21.06147737140819
+    longitude = 105.57668318886614
+
+    context = {
+        'lat': latitude,
+        'lng': longitude,
+        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY, # Truyền API key
+    }
+    return render(request, 'accounts/contact.html', context)
 @login_required
 def membership(request):
     profile = UserProfile.objects.get(user=request.user)
@@ -241,7 +260,8 @@ def membership(request):
                   {"profile": profile,
                    "privileges": privileges,
                    "current_rank": current_rank
-                   })
+                   }
+                  )
 
 @login_required
 def upgrade_membership(request, level):
@@ -262,31 +282,74 @@ def payment(request):
         "standard": "Tiêu chuẩn",
         "premium": "Cao cấp",
     }
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    user = request.user
     level_name = level_map.get(level, "Cơ bản")
 
     return render(request, "accounts/payment.html", {
         "level": level,
         "level_name": level_name,
+        'profile': profile,
+        "user": user,
+
     })
+# accounts/views.py
+from django.utils import timezone
+from datetime import timedelta # 👈 Import timedelta
+
 @login_required
 def process_payment(request):
     if request.method == "POST":
         level = request.POST.get("level", "basic")
-        
-        # Lấy profile của user hiện tại
         profile = request.user.userprofile
         
-        # Cập nhật gói membership
-        profile.membership_level = level
-        profile.save()
+        # Chỉ xử lý khi người dùng thực sự nâng cấp lên gói mới
+        if profile.membership_level != level:
+            # Lấy thời gian hiện tại
+            upgrade_time = timezone.now()
+            
+            # Cập nhật thông tin cho profile
+            profile.membership_level = level
+            profile.membership_upgrade_date = upgrade_time
+            # 👇 TÍNH TOÁN VÀ LƯU NGÀY HẾT HẠN
+            profile.membership_expiry_date = upgrade_time + timedelta(days=30)
+            
+            profile.save()
+            messages.success(request, f"Bạn đã nâng cấp thành công lên gói {level}!")
+        else:
+            messages.info(request, "Bạn đã ở gói thành viên này rồi.")
 
-        messages.success(request, f"Bạn đã nâng cấp thành công lên gói {level}!")
-        return redirect("payment_done")  # sau khi thanh toán xong quay lại trang membership
+        return redirect("payment_done")
     
     return redirect("payment_done")
 @login_required
 def payment_done(request):
-    return render(request, "accounts/payment_done.html")  
+    user = request.user
+    # Dùng get_or_create để đảm bảo profile luôn tồn tại, tránh lỗi
+    profile, created = UserProfile.objects.get_or_create(user=user)
+
+    if request.method == "POST":
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Cập nhật thông tin thành công!")
+            return redirect("profile_view") # Tên URL của chính view này
+        else:
+            messages.error(request, "Có lỗi xảy ra, vui lòng kiểm tra lại các trường thông tin.")
+    else:
+        user_form = UserForm(instance=user)
+        profile_form = UserProfileForm(instance=profile)
+
+    # Thêm user và date_joined vào context để hiển thị trong template
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+        "user": user, # Để tiện truy cập các thông tin như username, date_joined
+    }
+    return render(request, "accounts/payment_done.html",context)  
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import UserProfile  # model chứa phone, address, gender,...
 
@@ -437,3 +500,7 @@ def book_detail(request, book_id):
     else:
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
+def regis_by_fb(request):
+    return render(request, "accounts/regis_by_fb.html")
+def regis_by_gg(request):
+    return render(request, "accounts/regis_by_gg.html")

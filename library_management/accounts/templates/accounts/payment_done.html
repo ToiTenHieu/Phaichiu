@@ -166,7 +166,7 @@
                 </div>
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">
                     Chúc Mừng!
-                    <span class="block text-yellow-300">Bạn Đã Trở Thành Thành Viên Cao Cấp</span>
+                    <span class="block text-yellow-300">Bạn Đã Trở Thành{{ profile_form.instance.get_membership_level_display }}</span>
                 </h1>
                 <p class="text-xl md:text-2xl mb-8 opacity-90">
                     Cảm ơn bạn đã tin tưởng và nâng cấp! Hãy khám phá những đặc quyền tuyệt vời đang chờ bạn.
@@ -196,19 +196,19 @@
                                 <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
                                     <span class="text-white text-xs">✓</span>
                                 </span>
-                                <span class="text-gray-700">Gói: <strong>Thành viên Cao Cấp</strong></span>
+                                <span class="text-gray-700">Gói: Thành viên <strong>{{ profile_form.instance.get_membership_level_display }}</strong></span>
                             </div>
                             <div class="flex items-center">
                                 <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
                                     <span class="text-white text-xs">✓</span>
                                 </span>
-                                <span class="text-gray-700">Kích hoạt: <strong>20/12/2024</strong></span>
+                                <span class="text-gray-700">Kích hoạt: <strong>{{ profile_form.instance.membership_upgrade_date|date:"H:i, d/m/Y" }}</strong></span>
                             </div>
                             <div class="flex items-center">
                                 <span class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center mr-3">
                                     <span class="text-white text-xs">✓</span>
                                 </span>
-                                <span class="text-gray-700">Gia hạn: <strong>20/01/2025</strong></span>
+                                <span class="text-gray-700">Hết hạn: <strong style="color: red;">{{ profile_form.instance.membership_expiry_date|date:"H:i, d/m/Y" }}</strong></span>
                             </div>
                             <div class="flex items-center">
                                 <span class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-3">

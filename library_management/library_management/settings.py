@@ -148,3 +148,4 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # (Tuỳ chọn) Giới hạn thời gian session, ví dụ 30 phút
 SESSION_COOKIE_AGE = 1800  # giây = 30 phút
+GOOGLE_MAPS_API_KEY = 'AIzaSyCS0waA3JxAA9bB0-rAd-YH_eM2ayhugD0'

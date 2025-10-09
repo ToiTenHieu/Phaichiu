@@ -24,7 +24,8 @@ class UserProfile(models.Model):
         choices=MEMBERSHIP_CHOICES,
         default='basic'   # khi đăng ký mặc định là "Cơ bản"
     )
-
+    membership_upgrade_date = models.DateTimeField(null=True, blank=True, verbose_name="Ngày nâng cấp gói")
+    membership_expiry_date = models.DateTimeField(null=True, blank=True, verbose_name="Ngày hết hạn gói")
     def __str__(self):
         return self.name or self.user.username
     def get_full_name(self):

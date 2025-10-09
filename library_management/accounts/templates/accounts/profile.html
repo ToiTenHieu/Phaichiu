@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 {% block title%}Thông tin cá nhân{% endblock %}
 {% block extra_css %}
@@ -108,18 +110,10 @@
                         
                         <div class="text-center">
                             <div class="w-32 h-32 bg-gradient-to-br from-blue-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <span class="text-white text-4xl font-bold">NVM</span>
+                                <span class="text-white text-4xl font-bold"></span>
                             </div>
                             
                             <h4 class="text-xl font-semibold text-gray-900 mb-2">  {{  user.userprofile.name  }}</h4>                            
-                            <div class="space-y-3">
-                                <button onclick="changeAvatar()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
-                                    📷 Thay đổi ảnh
-                                </button>
-                                <button onclick="removeAvatar()" class="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors">
-                                    🗑️ Xóa ảnh
-                                </button>
-                            </div>
                         </div>
                         
                         <!-- Stats -->
@@ -135,6 +129,42 @@
                                 </div>
                             </div>
                         </div>
+                        {# Hiển thị theo định dạng Ngày/Tháng/Năm #}
+                        <p><strong>Ngày tham gia:</strong> {{ user.date_joined|date:"d/m/Y" }}</p>
+                        {% comment %} {# Hoặc hiển thị cả giờ và phút #}
+                        <p><strong>Ngày tham gia:</strong> {{ user.date_joined|date:"H:i, d/m/Y" }}</p>
+
+                        {# Hoặc định dạng đầy đủ hơn #}
+                        <p><strong>Ngày tham gia:</strong> {{ user.date_joined|date:"l, d F Y" }}</p> {% endcomment %}
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md max-w-sm mx-auto">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Hạng hiện tại: {{ user.userprofile.get_membership_level_display }}</h3>
+                        <a href="{% url 'membership' %}" class="block w-full py-3 px-6 text-center text-white bg-green-500 rounded-full hover:bg-green-600 transition-colors duration-300">
+                            Nâng cấp gói thành viên
+                        </a>
+                    <p>
+                        <strong>Gói hiện tại:</strong> 
+                        {{ profile_form.instance.get_membership_level_display }}
+                    </p>
+                    {% if profile_form.instance.membership_level != "basic" %}
+                        {% if profile_form.instance.membership_upgrade_date %}
+                            <p>
+                                <strong>Ngày nâng cấp gần nhất:</strong> 
+                                {{ profile_form.instance.membership_upgrade_date|date:"H:i, d/m/Y" }}
+                            </p>
+                        {% endif %}
+
+                        {# 👇 THÊM ĐOẠN NÀY ĐỂ HIỂN THỊ NGÀY HẾT HẠN #}
+                        {% if profile_form.instance.membership_expiry_date %}
+                            <p>
+                                <strong>Gói thành viên sẽ hết hạn vào:</strong> 
+                                <strong style="color: red;">{{ profile_form.instance.membership_expiry_date|date:"H:i, d/m/Y" }}</strong>
+                            </p>
+                        {% endif %}
+                        <a href="{% url 'payment' %}?level={{ profile_form.instance.membership_level }}" class="block w-full py-3 px-6 text-center text-white bg-green-500 rounded-full hover:bg-green-600 transition-colors duration-300">
+                            Gia hạn
+                        </a>
+                    {%endif%}    
                     </div>
                 </div>
 
@@ -147,6 +177,12 @@
                                 ✏️ Chỉnh sửa
                             </button>
                         </div>
+                        {% comment %} <a href="{% url 'upgrade_membership' 'standard' %}" class="btn btn-primary">
+                        Nâng cấp lên Tiêu chuẩn
+                        </a>
+                        <a href="{% url 'upgrade_membership' 'premium' %}" class="btn btn-success">
+                        Nâng cấp lên Cao cấp
+                        </a> {% endcomment %}
 
                         <form method="POST" id="profileForm" class="space-y-6">
                             {% csrf_token %}
@@ -211,6 +247,7 @@
                                     💾 Lưu thay đổi
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>

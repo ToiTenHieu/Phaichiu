@@ -25,6 +25,7 @@
                     <a href="{% url 'catalog' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Danh mục</a>
                     <a href="{% url 'services' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Dịch vụ</a>
                     <a href="{% url 'contact' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Liên hệ</a>
+                    <a href="{% url 'membership' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Gói thành viên</a> 
                 </nav>
                 <div class="flex items-center space-x-4">
                     {% if user.is_authenticated and user.userprofile.role == "user" %}
@@ -104,5 +105,9 @@
         {% block content %}
         {% endblock %}
     </main>
-</body>
+    <footer class="bg-gray-800 text-gray-300 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Thư Viện Trung Tâm. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
 </html>

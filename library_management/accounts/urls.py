@@ -17,6 +17,10 @@ urlpatterns = [
     path("payment/", views.payment, name="payment"),
     path("process-payment/", views.process_payment, name="process_payment"),
     path('payment_done/', views.payment_done, name='payment_done'),
+    path('regis_by_fb/', views.regis_by_fb, name='regis_by_fb'),
+    path('regis_by_gg/', views.regis_by_gg, name='regis_by_gg'),
+
+
 
     path('users/<int:user_id>/edit/', views.edit_user, name='edit_user'),
     path("api/users/<int:user_id>/delete/", views.delete_user_api, name="delete_user_api"),
